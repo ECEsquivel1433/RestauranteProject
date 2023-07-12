@@ -1,0 +1,132 @@
+﻿@model ML.Restaurante
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <section>
+        <h2> Restaurantes</h2><br />
+    </section>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="~/Scripts/Validations.js"></script>
+
+<script type="text/javascript" src="~/Scripts/Restaurante4.js"></script>
+
+<div class="container-fluid">
+    @using (Html.BeginForm("GetAll", "Restaurante", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Nombre)
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-arrow-right-short"></i></span>
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre" , @onkeypress="SoloLetras(event, 'txtNombre', 'lblNombre')" })
+                    @Html.ValidationMessageFor(model => model.Nombre, null, new {@class="text-danger"})
+                    @Html.Label(null, "", new{@id="lblNombre"})
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <input type="submit" value="Buscar" class="btn btn-info" />
+
+            </div>
+        </div>
+    }
+</div>
+<br />
+<section>
+    @*<div style="float:right;">
+        <div style"float:right;">
+            @Html.ActionLink("Agregar", "Form", "Restaurante", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-1" style="padding-left:100px">
+            <button type="button" class="btn btn-info" data-dismiss="modal" onclick="ModalOpen()">Agregar</button>
+        </div>
+    </div>
+</section>
+
+<section>
+    <table class=" table table-bordered table-responsive">
+        <thead>
+            <tr>
+                <td class="text-center" style=" font-weight:bold;">Editar</td>
+                <td class=" visually-hidden">IdUsuario</td>
+                <td class=" text-center" style="font-weight:bold;">Negocio</td>
+                <td class=" text-center" style="font-weight:bold;">Cantidad de empleados</td>
+                <td class=" text-center" style="font-weight:bold;">Capacidad de clientes</td>
+                <td class=" text-center" style="font-weight:bold;">Fecha de inauguracion</td>
+                <td class=" text-center" style="font-weight:bold;">Calificación</td>
+                <td class=" text-center" style=" font-weight:bold;">Eliminar</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ML.Restaurante restaurante in Model.Restaurantes)
+            {
+                <tr>
+                    <td class=" text-center"><a class="btn btn-warning bg-info bi-pencil-square" href="@Url.Action("Form", "Restaurante", new { IdRestaurante = restaurante.IdRestaurante })"></a></td>
+                    <td class="visually-hidden">@restaurante.IdRestaurante</td>
+                    <td>@restaurante.Nombre</td>
+                    <td>@restaurante.CantidadEmpleados</td>
+                    <td>@restaurante.CapacidadClientes</td>
+                    <td>@restaurante.FechaInauguracion</td>
+                    <td>@restaurante.Calificacion</td>
+                    <td class="text-center"><a class="btn btn-danger bi bi-file-x-fill" href="@Url.Action("Delete" ,"Restaurante", new { IdRestaurante = restaurante.IdRestaurante})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</section>
+
+
+@using (Html.BeginForm("GetAll", "Restaurante", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+<div class="modal fade" id="ModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Form</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="IdRestaurante" id="IdRestaurante" placeholder="IdRestaurante" disabled="disabled" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="Nombre" id="Nombre" placeholder="Nombre" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="CantidadEmpleados" id="CantidadEmpleados" placeholder="CantidadEmpleados" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="CapacidadClientes" id="CapacidadClientes" placeholder="CapacidadClientes" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="FechaInauguracion" id="FechaInauguracion" placeholder="FechaInauguracion" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="Calificacion" id="Calificacion" placeholder="Calificación" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-success" id="btnUpdate" onclick="Validate()">Actualizar</button>*@
+                    <input type="submit" value="Aceptar" class="btn btn-info" />
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="modalClose()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
